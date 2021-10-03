@@ -1,6 +1,5 @@
-var fs = require ('fs');
-const superagent = require('superagent');
-
+var fs = require("fs");
+const superagent = require("superagent");
 
 //------promise-----------------------
 
@@ -58,54 +57,51 @@ const superagent = require('superagent');
 
 //async-------------------------
 function readFilePromise(fileLocation) {
-    return new Promise((resolve, reject) => {
-      fs.readFile(fileLocation, (err, randomText) => {
-        if (err) {
-          reject('not able to read the file')
-        }
-        resolve(randomText)
-      })
-    })
+  return new Promise((resolve, reject) => {
+    fs.readFile(fileLocation, (err, randomText) => {
+      if (err) {
+        reject("not able to read the file");
+      }
+      resolve(randomText);
+    });
+  });
+}
+function writeFilePromise(fileLocation, result) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(fileLocation, result, (err) => {
+      if (err) {
+        reject("not able to write to the file");
+      }
+      resolve();
+    });
+  });
+}
+
+async function getRoboPic() {
+  try {
+    const randomText = await readFilePromise("./name.txt");
+    console.log(`Robo is ${randomText}`);
+    const res = await superagent.get(
+      `https://robohash.org/${data}/images/random`
+    );
+    console.log("Robo image is ", res.request.url);
+    await writeFilePromise("./robo-image.txt", res.request.url);
+    console.log("sucessfully written the file");
+  } catch (err) {
+    throw err;
   }
-  function writeFilePromise(fileLocation, result) {
-    return new Promise((resolve, reject) => {
-      fs.writeFile(fileLocation, result, (err) => {
-        if (err) {
-          reject('not able to write to the file')
-        }
-        resolve()
-      })
-    })
+  console.log("2. complete");
+}
+console.log("1. start");
+(async () => {
+  try {
+    await getRoboPic();
+    console.log("3. end");
+  } catch (err) {
+    console.log("3. end due to error");
   }
-  
-  
-  
-  async function getRoboPic() {
-    try {
-      const randomText = await readFilePromise('./name.txt')
-      console.log(`Robo is ${randomText}`)
-      const res = await superagent.get(
-        `https://robohash.org/${data}/images/random`
-      )
-      console.log('Robo image is ', res.request.url)
-      await writeFilePromise('./robo-image.txt', res.request.url)
-      console.log('sucessfully written the file')
-    } catch (err) {
-      throw err
-    }
-    console.log('2. complete')
-  }
-  console.log('1. start')
-  ;(async () => {
-    try {
-      await getRoboPic()
-      console.log('3. end')
-    } catch (err) {
-      console.log('3. end due to error')
-    }
-  })()
-  
-  // getRoboPic().then(() => {
-  //   console.log('3. end')
-  // })
-  
+})();
+
+// getRoboPic().then(() => {
+//   console.log('3. end')
+// })
