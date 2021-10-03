@@ -27,7 +27,7 @@ fs.writeFile("roboText.txt", roboText, (err) => {
   }
 });
 
-//Callbacks -
+//Callback -
 fs.readFile("./roboText.txt", (err, data) => {
   if (err) {
     console.log("error in reading the file", err.message);
